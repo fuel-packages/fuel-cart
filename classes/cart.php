@@ -31,11 +31,11 @@ abstract class Cart {
 	protected static $instance = null;
 	
 	/**
-	 * Basket factory. Returns a new Cart_Basket.
+	 * Cart instance factory. Returns a new cart driver.
 	 *
 	 * @param	string	$cart	the cart identifier.
 	 * @param	array	$config		aditional config array
-	 * @return	object	Cart_Basket instance
+	 * @return	object	new cart driver instance
 	 */
 	public static function factory($cart = 'default', $config = array())
 	{
@@ -75,11 +75,11 @@ abstract class Cart {
 	}
 	
 	/**
-	 * Resturns a Cart_Basket instance
+	 * Resturns a cart driver instance.
 	 *
 	 * @param	string	$cart		the cart identifier.
 	 * @param	array	$config		aditional config array
-	 * @return	object	Cart_Basket instance
+	 * @return	object	new cart driver instance
 	 */
 	public static function instance($cart = null, $config = array())
 	{
