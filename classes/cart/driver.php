@@ -62,6 +62,18 @@ abstract class Cart_Driver {
 	}
 	
 	/**
+	 * Empties the cart.
+	 *
+	 * @return    object    $this
+	 */
+	public function clear()
+	{
+		$this->items = array();
+		
+		return $this;
+	}
+	
+	/**
 	 * Returns a cart's config value
 	 *
 	 * @param	string	$key		the config key
