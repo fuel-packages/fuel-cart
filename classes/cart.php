@@ -106,7 +106,7 @@ abstract class Cart {
 		{
 			return static::$instances[$key];
 		}
-		return static::factory($cart, $config);
+		return static::forge($cart, $config);
 	}
 	
 	/**
