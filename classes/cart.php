@@ -29,15 +29,29 @@ abstract class Cart {
 	protected static $default = array();
 	protected static $instances = array();
 	protected static $instance = null;
-	
+
 	/**
 	 * Cart instance factory. Returns a new cart driver.
 	 *
-	 * @param	string	$cart	the cart identifier.
-	 * @param	array	$config		aditional config array
-	 * @return	object	new cart driver instance
+	 * @param       string    $cart      the cart identifier.
+	 * @param       array     $config    aditional config array
+	 * @return      object    new cart driver instance
+	 * @deprecated  until 1.2
 	 */
 	public static function factory($cart = 'default', $config = array())
+	{
+		logger(\Fuel::L_WARNING, 'This method is deprecated.  Please use a forge() instead.', __METHOD__);
+		return static::forge($cart, $condig);
+	}
+
+	/**
+	 * Cart instance factory. Returns a new cart driver.
+	 *
+	 * @param   string  $cart       the cart identifier.
+	 * @param   array   $config     aditional config array
+	 * @return  object  new cart driver instance
+	 */
+	public static function forge($cart = 'default', $config = array())
 	{
 		$key = $cart;
 		empty($config) or $key.= md5(var_export($config, true));
