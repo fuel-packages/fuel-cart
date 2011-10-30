@@ -41,7 +41,7 @@ abstract class Cart {
 	public static function factory($cart = 'default', $config = array())
 	{
 		logger(\Fuel::L_WARNING, 'This method is deprecated.  Please use a forge() instead.', __METHOD__);
-		return static::forge($cart, $condig);
+		return static::forge($cart, $config);
 	}
 
 	/**
