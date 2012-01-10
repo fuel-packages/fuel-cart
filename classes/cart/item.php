@@ -132,7 +132,7 @@ class Cart_Item {
 		
 		foreach($this->options as $option)
 		{
-			$price += $option[2];
+			$price += $option[1];
 		}
 				
 		if($formatted)
