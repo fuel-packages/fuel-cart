@@ -4,10 +4,10 @@
  *
  * @package		Cart
  * @version		1.0
- * @author		Fuel Development Team
+ * @author		Frank de Jonge (FrenkyNet) <frenky@frenky.net>
  * @license		MIT License
- * @copyright	2010 - 2012 Fuel Development Team
- * @link		http://fuelphp.com
+ * @copyright	2010 - 2012 Frank de Jonge
+ * @link		http://fuelphp.com / http://frenky.net
  */
 
 

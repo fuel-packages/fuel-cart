@@ -123,5 +123,20 @@ Add an item to the cart, with options:
 		'extra' => array('Ball pump', 2.99), // add an option with an added price
 	));
 	
+Schema Needed for Auth
+----------------------
+
+Raw sql:
+
+	CREATE TABLE `carts` (
+		`id` int(255) NOT NULL AUTO_INCREMENT,
+		`user_id` int(255) NOT NULL,
+		`identifier` varchar(100) NOT NULL,
+		`contents` text NOT NULL,
+		PRIMARY KEY (`id`)
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+
+DBUtil:
+
 
 

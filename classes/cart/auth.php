@@ -4,10 +4,10 @@
  *
  * @package		Cart
  * @version		1.0
- * @author		Fuel Development Team
+ * @author		Frank de Jonge (FrenkyNet) <frenky@frenky.net>
  * @license		MIT License
- * @copyright	2010 - 2012 Fuel Development Team
- * @link		http://fuelphp.com
+ * @copyright	2010 - 2012 Frank de Jonge
+ * @link		http://fuelphp.com / http://frenky.net
  */
  
 /*
@@ -59,7 +59,7 @@ class Cart_Auth extends \Cart_Driver {
 		}
 		
 		$cart = \DB::select()
-			->from($this->config_get('cart_table', 'carts'))
+			->from($this->config_get('table', 'carts'))
 			->as_assoc()
 			->where('identifier', $key)
 			->and_where('user_id', $user_id)
