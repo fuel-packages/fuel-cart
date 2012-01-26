@@ -118,7 +118,7 @@ abstract class Cart_Driver {
 	{
 		if( ! array_key_exists($rowid, $this->items))
 		{
-			throw new \InvalidCartItemException('Cart item does not exist: '.$id);
+			throw new \InvalidCartItemException('Cart item does not exist: '.$rowid);
 		}
 		return $this->items[$rowid];
 	}
