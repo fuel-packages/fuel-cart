@@ -52,7 +52,7 @@ class Cart_Item {
 			foreach($this->values['__itemoptions'] as $option)
 			{
 				is_array($option) or $option = array($option, 0);
-				$this->option[] = $option;
+				$this->options[] = $option;
 			}
 			unset($this->values['__itemoptions']);
 		}
