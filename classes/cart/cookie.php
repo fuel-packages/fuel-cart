@@ -1,13 +1,13 @@
 <?php
 /**
- * Fuel is a fast, lightweight, community driven PHP5 framework.
+ * A very flexible, full and easy cart solution for FuelPHP
  *
- * @package		Fuel
+ * @package		Cart
  * @version		1.0
- * @author		Fuel Development Team
+ * @author		Frank de Jonge (FrenkyNet)
  * @license		MIT License
- * @copyright	2010 - 2011 Fuel Development Team
- * @link		http://fuelphp.com
+ * @copyright	2010 - 2012 Frank de Jonge
+ * @link		http://frankdejonge.nl
  */
 
 

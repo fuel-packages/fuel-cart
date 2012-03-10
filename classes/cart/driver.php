@@ -1,36 +1,41 @@
 <?php
 /**
- * Fuel is a fast, lightweight, community driven PHP5 framework.
+ * A very flexible, full and easy cart solution for FuelPHP
  *
- * @package		Fuel
+ * @package		Cart
  * @version		1.0
- * @author		Fuel Development Team
+ * @author		Frank de Jonge (FrenkyNet)
  * @license		MIT License
- * @copyright	2010 - 2011 Fuel Development Team
- * @link		http://fuelphp.com
+ * @copyright	2010 - 2012 Frank de Jonge
+ * @link		http://frankdejonge.nl
  */
 
 
 namespace Cart;
 
 abstract class Cart_Driver {
-	
+
 	/**
-	 * The cart's settings.
+	 * @var  array  $config  the cart's settings
 	 */
 	protected $config = array();
-	
+
 	/**
-	 * The cart's items.
+	 * @var  array  $items  the cart's items
 	 */
 	protected $items = array();
-	
+
 	/**
-	 * Whether the cart is deleted.
+	 * @var  boolean  $deleted  whether the cart is deleted
 	 */
 	protected $deleted = false;
 	
-	
+
+	/**
+	 * Cart driver constructor.
+	 *
+	 * @param  array  $config  cart config array
+	 */
 	public function __construct($config)
 	{
 		$this->config = $config;
@@ -49,7 +54,7 @@ abstract class Cart_Driver {
 			$this->items[$rowid] = new \Cart_Item($content, $this, $rowid);
 		}
 	}
-	
+
 	/**
 	 * Delete the cart.
 	 */
@@ -64,7 +69,7 @@ abstract class Cart_Driver {
 	/**
 	 * Empties the cart.
 	 *
-	 * @return    object    $this
+	 * @return  object  $this
 	 */
 	public function clear()
 	{

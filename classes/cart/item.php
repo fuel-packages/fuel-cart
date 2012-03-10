@@ -1,13 +1,13 @@
 <?php
 /**
- * Fuel is a fast, lightweight, community driven PHP5 framework.
+ * A very flexible, full and easy cart solution for FuelPHP
  *
- * @package		Fuel
+ * @package		Cart
  * @version		1.0
- * @author		Fuel Development Team
+ * @author		Frank de Jonge (FrenkyNet)
  * @license		MIT License
- * @copyright	2010 - 2011 Fuel Development Team
- * @link		http://fuelphp.com
+ * @copyright	2010 - 2012 Frank de Jonge
+ * @link		http://frankdejonge.nl
  */
 
 
@@ -16,22 +16,22 @@ namespace Cart;
 class Cart_Item {
 
 	/**
-	 * Item values
+	 * @var  array  $values  item values
 	 */
 	protected $values = array();
 	
 	/**
-	 * Item values
+	 * @var  array  $options  item options
 	 */
 	protected $options = array();
 	
 	/**
-	 * Cart
+	 * @var  object  $cart  cart object
 	 */
 	protected $cart;
 	
 	/**
-	 * Cart rowid
+	 * @var  string  $rowid  cart row id
 	 */
 	protected $rowid;
 
@@ -269,6 +269,8 @@ class Cart_Item {
 	
 	/**
 	 * Item's array, used for cart saving.
+	 *
+	 * @return  array  the item as an array
 	 */
 	public function _as_array()
 	{
