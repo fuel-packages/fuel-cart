@@ -19,17 +19,17 @@ class Cart_Item {
 	 * @var  array  $values  item values
 	 */
 	protected $values = array();
-	
+
 	/**
 	 * @var  array  $options  item options
 	 */
 	protected $options = array();
-	
+
 	/**
 	 * @var  object  $cart  cart object
 	 */
 	protected $cart;
-	
+
 	/**
 	 * @var  string  $rowid  cart row id
 	 */
@@ -57,7 +57,7 @@ class Cart_Item {
 			unset($this->values['__itemoptions']);
 		}
 	}
-	
+
 	/**
 	 * Returns the item's name
 	 *
@@ -67,7 +67,7 @@ class Cart_Item {
 	{
 		return $this->values['name'];
 	}
-	
+
 	/**
 	 * Returns the item's id
 	 *
@@ -77,7 +77,7 @@ class Cart_Item {
 	{
 		return $this->values['id'];
 	}
-	
+
 	/**
 	 * Returns the item's quantity
 	 *
@@ -87,7 +87,7 @@ class Cart_Item {
 	{
 		return (int) $this->values['qty'];
 	}
-	
+
 	/**
 	 * Returns the item's tax rate.
 	 *
@@ -97,7 +97,7 @@ class Cart_Item {
 	{
 		return array_key_exists('tax', $this->values) ? $this->values['tax'] : $this->cart->tax();
 	}
-	
+
 	/**
 	 * Returns the item's options
 	 *
@@ -107,7 +107,7 @@ class Cart_Item {
 	{
 		return $this->options;
 	}
-	
+
 	/**
 	 * Returns the item's rowid
 	 *
@@ -117,7 +117,7 @@ class Cart_Item {
 	{
 		return $this->rowid;
 	}
-	
+
 	/**
 	 * Returns the items total price
 	 *
@@ -127,14 +127,14 @@ class Cart_Item {
 	public function get_price($formatted = true, $include_tax = false)
 	{
 		$price = (float) $this->values['price'];
-		
-		$include_tax and $price = $this->_price_tax($price);
-		
+
 		foreach($this->options as $option)
 		{
 			$price += $option[1];
 		}
-				
+
+		$include_tax and $price = $this->_price_tax($price);
+
 		if($formatted)
 		{
 			return number_format($price, 2, $this->cart->config_get('dec_point'), $this->cart->config_get('thousands_sep'));
@@ -151,9 +151,9 @@ class Cart_Item {
 	protected function _price_tax($price)
 	{
 		$tax = $this->get_tax();
-		
+
 		is_array($tax) or $tax = array($tax);
-				
+
 		foreach($tax as $_tax)
 		{
 			if(is_string($_tax) and substr($_tax, 0, 1) === '+')
@@ -165,7 +165,7 @@ class Cart_Item {
 				$price += (float) $price * $_tax;
 			}
 		}
-		
+
 		return round($price, 2);
 	}
 	
@@ -178,7 +178,7 @@ class Cart_Item {
 	public function get_subtotal($formatted = true, $include_tax = false)
 	{
 		$subtotal = $this->get_price(false, $include_tax) * $this->get_qty();
-		
+
 		if($formatted)
 		{
 			return number_format($subtotal, 2, $this->cart->config_get('dec_point'), $this->cart->config_get('thousands_sep'));
@@ -196,16 +196,16 @@ class Cart_Item {
 	public function set_option($key, $value = null, $price = 0)
 	{
 		is_array($key) or $key = array($key => array($value, $price));
-		
+
 		foreach($key as $_key => $value)
 		{
 			is_array($value) or $value = array($value, 0);
 			count($value) < 2 and $value[] = 0;
 			$this->options[$_key] = $value;
 		}
-		
+
 		$this->rowid = $this->cart->_update_rowid($this->rowid);
-		
+
 		return $this;
 	}
 	
@@ -250,12 +250,12 @@ class Cart_Item {
 	public function update($key, $value = null)
 	{
 		is_array($key) or $key = array($key => $value);
-		
+
 		foreach($key as $_key => $value)
 		{
 			$this->values[$_key] = $value;
 		}
-		
+
 		return $this;
 	}
 	
@@ -278,5 +278,4 @@ class Cart_Item {
 		$return['__itemoptions'] = $this->options;
 		return $return;
 	}
-	
 }
