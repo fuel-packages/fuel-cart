@@ -16,12 +16,12 @@ namespace Cart;
 /**
  * Exception for invalid cart instance retrieval.
  */
-class InvalidCartException extends \Fuel_Exception {}
+class InvalidCartException extends \FuelException {}
 
 /**
  * Exception for invalid cart item insert.
  */
-class InvalidCartItemException extends \Fuel_Exception {}
+class InvalidCartItemException extends \FuelException {}
 
 
 abstract class Cart {
