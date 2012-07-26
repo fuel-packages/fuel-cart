@@ -1,0 +1,13 @@
+sjl.seq(
+	[
+		'/assets/js/jquery.js',
+		'/assets/js/modernizr.js',
+		'/assets/js/highlight.pack.js',
+		'/assets/js/underscore.js'
+	],
+	[
+		'/assets/js/backbone.js',
+		'/assets/js/jquery.scrollto.js'
+	],
+	'/assets/js/docs.js'
+);

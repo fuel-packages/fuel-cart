@@ -1,0 +1,450 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">	
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta name="keywords" content="" />
+		<meta name="description" content="" />
+		<meta name="author" content="" />
+		<meta name="robots" content="all" />
+		<title>FuelPHP Cart Package</title>
+		<link rel="stylesheet/less" type="text/css" href="/assets/less/docs.less">
+		<script src="/assets/js/less.js"></script>
+		<script data-main="/assets/js/app.js" src="/assets/js/sjl.js"></script>
+	</head>
+	<body>
+		<a href="https://github.com/FrenkyNet/fuel-cart"><img style="position: fixed; z-index: 100; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png" alt="Fork me on GitHub"></a>
+		<article id="main">
+		
+			<hgroup>
+				<h1>FuelPHP Cart Package</h1>
+				<h2>Easy and flexible cart solution for FuelPHP.</h2>
+			</hgroup>
+			
+			<section id="about">
+				<h2><a href="#/about">About</a></h2>
+				<p>
+					Cart is a easy to use, very versatile cart solution for you FuelPHP app.
+					With many drivers and an easy driver interface to extend the package will
+					most likely have everything you'll want.
+				</p>
+				<h3>At a glance</h3>
+				<ul>
+					<li>Fully featured Cart package.</li>
+					<li>Three storage implementations out of the box.</li>
+					<li>Easy to extend and build upon.</li>
+					<li>Auth integration for SimpleAuth.</li>
+				</ul>
+			</section>
+			<section id="install">
+				<h2><a href="#/install">Install</a></h2>
+				<p>You can install the package using either Oil:</p>
+				<pre class="cli"><code>$ php oil package install cart</code></pre>
+				<p>Or download the package manually and place it your packages directory</p>
+				<h3>Get ready to use it</h3>
+				<p>You can load the package manually:</p>
+				<pre class="php"><code class="php">// Somewhere in you application, before usage.
+\Package::load('cart');</code></pre>
+				<p>Or always load the package through config in the always_load section:</p>
+				<pre><code class="php">'always_load'  => array(
+	/**
+	 * These packages are loaded on Fuel's startup.
+	 */
+	'packages'  => array(
+		'cart',
+	),
+),</code></pre>
+			</section>
+			<section id="config">
+				<h2><a href="#/config">Configuration</a></h2>
+				<p>Copy config/cart.php to app/config/cart.php and change whatever setting in need of changing.</p>
+				<h3>General configuration options</h3>
+				<dl>
+					<dt>storage_prefix</dt>
+					<dd>Cookie or Session key prefix.</dd>
+					<dt>storage_suffix</dt>
+					<dd>Cookie or Session key suffix.</dd>
+					<dt>default_cart</dt>
+					<dd>Default cart instance name</dd>
+					<dt>default</dt>
+					<dd>An array of default cart instance settings.</dd>
+				</dl>
+				<h3>Cart instance configuration</h3>
+				<dl>
+					<dt>tax</dt>
+					<dd>Tax defined as float (like: 0.19)</dd>
+					<dt>name</dt>
+					<dd>Cart instance name</dd>
+					<dt>dec_point</dt>
+					<dd>Decimal point for number formatting</dd>
+					<dt>thousands_sep</dt>
+					<dd>Thousands seperator for number formatting</dd>
+					<dt>driver</dt>
+					<dd>Driver type ('cookie', 'session', 'auth')</dd>
+					<dt>cookie_expire</dt>
+					<dd>Cart expiration for the cookie driver</dd>
+					<dt>auto_save</dt>
+					<dd>Wether to automatically save the cart, very handy</dd>
+				</dl>
+			</section>
+			<section id="drivers">
+				<h2><a href="#/drivers">Drivers</a></h2>
+				<p class="no-pad">
+					The cart package comes with a couple of drivers right out of the box:
+				</p>
+				<ul>
+					<li><a href="#/drivers/session">Session</a>
+					<li><a href="#/drivers/cookie">Cookie</a>
+					<li><a href="#/drivers/auth">Auth</a>
+				</ul>
+				<h3 id="drivers-session"><a href="#/drivers/session">Session</a></h3>
+				<p>
+					The Session driver uses FuelPHP's Session class to store cart data.
+				</p>
+				<h3 id="drivers-cookie"><a href="#/drivers/cookie">Cookie</a></h3>
+				<p>
+					The Cookie driver uses FuelPHP's Cookie class to store cart data.
+				</p>
+				<h3 id="drivers-auth"><a href="#/drivers/auth">Auth</a></h3>
+				<p>
+					The auth driver is a simple implementation of combining users with an Auth package.
+					In this case we're using FuelPHP's SimpleAuth implementation.
+				</p>
+				<p>
+					The Auth driver relies on the following database schema:
+				</p>
+				<pre class="sql"><code>CREATE TABLE `carts` (
+	`id` int(255) NOT NULL AUTO_INCREMENT,
+	`user_id` int(255) NOT NULL,
+	`identifier` varchar(100) NOT NULL,
+	`contents` text NOT NULL,
+	PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;</code></pre>
+				<p>There are two config settings specifically for the Auth driver:</p>
+				<dl>
+					<dt>cart_table</dt>
+					<dd>The database name</dd>
+					<dt>impersonate</dt>
+					<dd>Use this to spoof the user's id. This allows you to control the users cart.</dd>
+			</section>
+			<section id="usage">
+				<h2><a href="#/usage">Usage</a></h2>
+				<ul>
+					<li><a href="#/usage/single">Single cart usage</a></li>
+					<li><a href="#/usage/multi">Multi cart usage</a></li>
+					<li><a href="#/usage/api">API</a></li>
+				</ul>
+			</section>
+			<section id="usage-single">
+				<h2><a href="#/usage/single">Single cart usage</a></h2>
+				<p>
+					If you're using the package to affect only one cart, the static interface will
+					provide you a with easy access to your cart. When using the static interface,
+					the cals are redirected to the default cart instance. This is the cart instance
+					you can specify in the <a href="#/config">configuration</a>. 
+					Because the static calls are redirected onto the default cart instance, you can
+					chain all of the calls you could normally do on a cart instance.
+				</p>
+			</section>
+			<section id="usage-multi">
+				<h2><a href="#/usage/single">Multi cart usage</a></h2>
+				<p>
+					The Cart package has full capabilities to manage multiple carts.
+				</p>
+			</section>
+			<section id="usage-api">
+				<h2><a href="#/usage/api">API</a></h2>
+				<p>
+					The Cart package API is devided into three section: Cart class, Cart instance and Cart item.
+					When using the single cart approach all instance methods also apply for the Cart class.
+				</p>
+				<h3>Cart class API</h3>
+				<ul>
+					<li><a href="#/usage/api/cart/forge">Cart::forge()</a></li>
+					<li><a href="#/usage/api/cart/instance">Cart::instance()</a></li>
+				</ul>
+				<h3>Cart instance API</h3>
+				<ul>
+					<li><a href="#/usage/api/instance/delete">$cart->delete()</a></li>
+					<li><a href="#/usage/api/instance/clear">$cart->clear()</a></li>
+					<li><a href="#/usage/api/instance/config_get">$cart->config_get()</a></li>
+					<li><a href="#/usage/api/instance/name">$cart->name()</a></li>
+					<li><a href="#/usage/api/instance/tax">$cart->tax()</a></li>
+					<li><a href="#/usage/api/instance/item">$cart->item()</a></li>
+					<li><a href="#/usage/api/instance/has_item">$cart->has_item()</a></li>
+					<li><a href="#/usage/api/instance/items">$cart->items()</a></li>
+					<li><a href="#/usage/api/instance/num_items">$cart->num_items()</a></li>
+					<li><a href="#/usage/api/instance/add">$cart->add()</a></li>
+					<li><a href="#/usage/api/instance/remove">$cart->remove()</a></li>
+					<li><a href="#/usage/api/instance/save">$cart->save()</a></li>
+					<li><a href="#/usage/api/instance/total_price">$cart->total_price()</a></li>
+					<li><a href="#/usage/api/instance/total_qty">$cart->total_qty()</a></li>
+					<li><a href="#/usage/api/instance/total_qty">$cart->total_qty()</a></li>
+				</ul>
+				<h3>Cart item API</h3>
+				<ul>
+					<li><a href="#/usage/api/item/get_name">$item->get_name()</a></li>
+					<li><a href="#/usage/api/item/get_id">$item->get_id()</a></li>
+					<li><a href="#/usage/api/item/get_qty">$item->get_qty()</a></li>
+					<li><a href="#/usage/api/item/get_tax">$item->get_tax()</a></li>
+					<li><a href="#/usage/api/item/get_options">$item->get_options()</a></li>
+					<li><a href="#/usage/api/item/get_rowid">$item->get_rowid()</a></li>
+					<li><a href="#/usage/api/item/get_price">$item->get_price()</a></li>
+					<li><a href="#/usage/api/item/get_subtotal">$item->get_subtotal()</a></li>
+					<li><a href="#/usage/api/item/set_option">$item->set_option()</a></li>
+					<li><a href="#/usage/api/item/delete_option">$item->delete_option()</a></li>
+					<li><a href="#/usage/api/item/has_options">$item->has_options()</a></li>
+					<li><a href="#/usage/api/item/has_option">$item->has_option()</a></li>
+					<li><a href="#/usage/api/item/update">$item->update()</a></li>
+					<li><a href="#/usage/api/item/delete">$item->delete()</a></li>
+				</ul>
+				<article class="func-well" id="usage-api-cart-forge">
+					<h2><a href="#/usage/api/cart/forge">Cart::forge($cart = 'default', $config = array())</a></h2>
+					<p>
+						Cart instance factory. Returns a cart driver instance. 
+					</p>
+					<dl>
+						<dt>$cart</dt>
+						<dd>The cart identifier <span class="type-label">string: 'default'</span></dd>
+						<dt>$condig</dt>
+						<dd>Additional config array for dynamic settings <span class="type-label">array: array()</span></dd>
+					</dl>
+					<pre class="php"><code>// Get a cart instance
+$cart = Cart::forge('my_cart');
+
+// Get a cart instance with dynamic condig
+$other = \Cart::forge('other', array(
+	'auto_save' => false
+));</code></pre>
+				</article>
+				<article class="func-well" id="usage-api-cart-instance">
+					<h2><a href="#/usage/api/cart/instance">Cart::instance($cart = null, $config = array())</a></h2>
+					<p>
+						Retrieve a cart instance, will fall back to <a href="#/usage/api/cart/forge">Cart::forge</a>
+						if no cart is instanciated.
+					</p>
+					<dl>
+						<dt>$cart</dt>
+						<dd>The cart identifier <span class="type-label">string: null</span></dd>
+						<dt>$condig</dt>
+						<dd>Additional config array for dynamic settings <span class="type-label">array: array()</span></dd>
+					</dl>
+					<pre class="php"><code>// Get a cart instance
+$cart = Cart::instance('my_cart');
+
+// Get a cart instance with dynamic condig
+$other = \Cart::instance('other', array(
+	'auto_save' => false
+));</code></pre>
+				</article>
+				<article class="func-well" id="usage-api-instance-delete">
+					<h2><a href="#/usage/api/instance/delete">$instance->delete()</a></h2>
+					<p>
+						Deletes a cart instance.
+					</p>
+					<pre class="php"><code>// Get a cart instance
+$cart = Cart::instance('my_cart');
+
+// Delete the instance
+$cart->delete();
+
+// Or use the static interface
+Cart::delete();
+</code></pre>
+				</article>
+				<article class="func-well" id="usage-api-instance-clear">
+					<h2><a href="#/usage/api/instance/clear">$instance->clear()</a></h2>
+					<p>
+						Empties a cart instance.
+					</p>
+					<pre class="php"><code>// Get a cart instance
+$cart = Cart::instance('my_cart');
+
+// Empty the instance
+$cart->clear();
+
+// Or use the static interface
+Cart::clear();
+</code></pre>
+				</article>
+				<article class="func-well" id="usage-api-instance-config_get">
+					<h2><a href="#/usage/api/instance/config_get">$instance->config_get($key, $default = null)</a></h2>
+					<p>
+						Get a value from the cart's config.
+					</p>
+					<dl>
+						<dt>$key</dt>
+						<dd>The config key <span class="type-label">string</span></dd>
+						<dt>$default</dt>
+						<dd>Default value when not found <span class="type-label">array: null</span></dd>
+					</dl>
+					<pre class="php"><code>// Get a cart instance
+$cart = Cart::instance('my_cart');
+
+// get the auto_save value
+$auto_save = $cart->config_get('auto_save');
+
+// Use the static interface, get true by default
+Cart::config_get('auto_save', true);
+</code></pre>
+				</article>
+				<article class="func-well" id="usage-api-instance-name">
+					<h2><a href="#/usage/api/instance/name">$instance->name()</a></h2>
+					<p>
+						Get the cart's name.
+					</p>
+					<pre class="php"><code>// Get a cart instance
+$cart = Cart::instance('my_cart');
+
+// get the auto_save value
+$name = $cart->name();
+
+// Use the static interface
+$name = Cart::name();
+</code></pre>
+				</article>
+				<article class="func-well" id="usage-api-instance-tax">
+					<h2><a href="#/usage/api/instance/tax">$instance->tax()</a></h2>
+					<p>
+						Get the cart's tax value.
+					</p>
+					<pre class="php"><code>// Get a cart instance
+$cart = Cart::instance('my_cart');
+
+// get the auto_save value
+$tax = $cart->tax();
+
+// Use the static interface
+$tax = Cart::tax();
+</code></pre>
+				</article>
+				<article class="func-well" id="usage-api-instance-item">
+					<h2><a href="#/usage/api/instance/item">$instance->item($rowid)</a></h2>
+					<p>
+						Retrieve an item from a cart.
+					</p>
+					<dl>
+						<dt>$rowid</dt>
+						<dd>The rowid<span class="type-label">string</span></dd>
+					</dl>
+					<pre class="php"><code>// Get a cart instance
+$cart = Cart::instance('my_cart');
+
+// get the auto_save value
+$item = $cart->item($rowid);
+
+// Use the static interface
+$item = Cart::item($rowid);
+</code></pre>
+				</article>
+				<article class="func-well" id="usage-api-instance-has_item">
+					<h2><a href="#/usage/api/instance/has_item">$instance->has_item($rowid)</a></h2>
+					<p>
+						Check wether the cart has a specific item.
+					</p>
+					<dl>
+						<dt>$rowid</dt>
+						<dd>The rowid<span class="type-label">string</span></dd>
+					</dl>
+					<pre class="php"><code>// Get a cart instance
+$cart = Cart::instance('my_cart');
+
+// get the auto_save value
+$has_item = $cart->has_item($rowid);
+
+// Use the static interface
+$has_item = Cart::has_item($rowid);
+</code></pre>
+				</article>
+				<article class="func-well" id="usage-api-instance-items">
+					<h2><a href="#/usage/api/instance/items">$instance->items()</a></h2>
+					<p>
+						Retrieve all the carts items
+					</p>
+					<pre class="php"><code>// Get a cart instance
+$cart = Cart::instance('my_cart');
+
+// get the auto_save value
+$items = $cart->items();
+
+// Use the static interface
+$items = Cart::items();
+</code></pre>
+				</article>
+				<article class="func-well" id="usage-api-instance-add">
+					<h2><a href="#/usage/api/instance/items">$instance->add($values, $options = array(), $force_single = false)</a></h2>
+					<p>
+						Adds an items or set of items to a cart. Returns a[n array of] rowid[s].
+					</p>
+					<dl>
+						<dt>$values</dt>
+						<dd>Item array or collection of item arrays.<span class="type-label">array</span></dd>
+						<dt>$options</dt>
+						<dd><a href="#/usage/api/item/set_option">Options array</a> for single entry adding.<span class="type-label">array: array()</span></dd>
+						<dt>$force_single</dt>
+						<dd>Wether to force singular input, for internal use.<span class="type-label">boolean: false</span></dd>
+					</dl>
+					<pre class="php"><code>// Get a cart instance
+$cart = Cart::instance('my_cart');
+
+$rowid = $cart->add(array(
+    'name' => 'Blue Ball',
+    'id' => 'toys_2937',
+    'qty' => 1,
+    'price' => 6.99,
+));
+
+$rowids = $cart->add(array(
+    array(
+        'name' => 'Blue Ball',
+        'id' => 'toys_2937',
+        'qty' => 1,
+        'price' => 6.99,
+    ),
+    array(
+        'name' => 'Red Ball',
+        'id' => 'toys_2938',
+        'qty' => 1,
+        'price' => 6.99,
+    ),
+));
+
+// Use the static interface
+$rowid = Cart::add(array(
+    'name' => 'Blue Ball',
+    'id' => 'toys_2937',
+    'qty' => 1,
+    'price' => 6.99,
+));
+</code></pre>
+				</article>
+			</section>
+		</article>
+		<aside>
+			<h2><a href="#/main">FuelPHP Cart Package</a></h2>
+			<h3>Table of contents</h3>
+			<ul>
+				<li><a href="#/about">About</a></li>
+				<li><a href="#/install">Install</a></li>
+				<li><a href="#/config">Configuration</a></li>
+				<li>
+					<a href="#/drivers">Drivers</a>
+					<ul>
+						<li><a href="#/drivers/session">Session</a>
+						<li><a href="#/drivers/cookie">Cookie</a>
+						<li><a href="#/drivers/auth">Auth</a>
+					</ul>
+				</li>
+				<li>
+					<a href="#/usage">Usage</a>
+					<ul>
+						<li><a href="#/usage/single">Single cart usage</a></li>
+						<li><a href="#/usage/multi">Multi cart usage</a></li>
+						<li><a href="#/usage/api">API</a></li>
+					</ul>
+				</li>
+			</ul>
+		</aside>
+	</body>
+</html>
