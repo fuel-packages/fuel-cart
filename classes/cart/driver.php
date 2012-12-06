@@ -29,7 +29,7 @@ abstract class Cart_Driver {
 	 * @var  boolean  $deleted  whether the cart is deleted
 	 */
 	protected $deleted = false;
-	
+
 
 	/**
 	 * Cart driver constructor.
@@ -39,15 +39,15 @@ abstract class Cart_Driver {
 	public function __construct($config)
 	{
 		$this->config = $config;
-		
+
 		$this->config['auto_save'] and \Event::register('shutdown', array($this, 'save'));
-		
+
 		$items = $this->config_get('items', '');
-						
+
 		empty($items) and $items = $this->_get($this->config['storage_key']);
-		
+
 		is_string($items) and $items = unserialize(stripslashes($items));
-		
+
 		foreach($items as $rowid => $item)
 		{
 			$content = is_object($item) ? $item->_as_array() : $item;
@@ -65,7 +65,7 @@ abstract class Cart_Driver {
 		// Mark as deleted to it doesn't get saved (no session/cookie polution).
 		$this->deleted = true;
 	}
-	
+
 	/**
 	 * Empties the cart.
 	 *
@@ -74,10 +74,10 @@ abstract class Cart_Driver {
 	public function clear()
 	{
 		$this->items = array();
-		
+
 		return $this;
 	}
-	
+
 	/**
 	 * Returns a cart's config value
 	 *
@@ -92,7 +92,7 @@ abstract class Cart_Driver {
 		}
 		return $default;
 	}
-	
+
 	/**
 	 * Get the cart's name
 	 *
@@ -102,7 +102,7 @@ abstract class Cart_Driver {
 	{
 		return $this->config['name'];
 	}
-	
+
 	/**
 	 * Get the cart's tax rule(s)
 	 *
@@ -112,22 +112,22 @@ abstract class Cart_Driver {
 	{
 		return $this->config['tax'];
 	}
-	
+
 	/**
 	 * Get a cart item
 	 *
-	 * @param	string	$id		the item's rowid
+	 * @param	string	$rowid		the item's rowid
 	 * @return	object	Cart_Item instance
 	 */
 	public function item($rowid)
 	{
 		if( ! array_key_exists($rowid, $this->items))
 		{
-			throw new \InvalidCartItemException('Cart item does not exist: '.$id);
+			throw new \InvalidCartItemException('Cart item does not exist: '.$rowid);
 		}
 		return $this->items[$rowid];
 	}
-	
+
 	/**
 	 * Check whether the cart holds a specific item
 	 *
@@ -138,17 +138,17 @@ abstract class Cart_Driver {
 	{
 		return array_key_exists($rowid, $this->items);
 	}
-	
+
 	/**
 	 * Get all the items from the cart
-	 * 
+	 *
 	 * @return array	an array of cart items
 	 */
 	public function items()
 	{
 		return $this->items;
 	}
-	
+
 	/**
 	 * Get the number of items in the cart
 	 *
@@ -158,7 +158,7 @@ abstract class Cart_Driver {
 	{
 		return count($this->items);
 	}
-	
+
 	/**
 	 * Adds an items or items to the cart.
 	 * When adding multiple items $options will be ignored.
@@ -181,7 +181,7 @@ abstract class Cart_Driver {
 			}
 			return $rowids;
 		}
-		
+
 		$required = array('id', 'name', 'price');
 		foreach($required as $field)
 		{
@@ -190,10 +190,10 @@ abstract class Cart_Driver {
 				throw new \InvalidCartItemException('Invalid cart item, missing value: '.$field);
 			}
 		}
-		
+
 		array_key_exists('qty', $values) or $values['qty'] = 1;
 		$rowid = $values['id'].'::'.md5(var_export($options, true));
-		
+
 		if(array_key_exists($rowid, $this->items))
 		{
 			$this->items[$rowid]->update('qty', $this->items[$rowid]->get_qty() + $values['qty']);
@@ -207,7 +207,7 @@ abstract class Cart_Driver {
 
 		return $rowid;
 	}
-	
+
 	/**
 	 * Remove an item from a cart.
 	 *
@@ -217,7 +217,7 @@ abstract class Cart_Driver {
 	{
 		unset($this->items[$rowid]);
 	}
-	
+
 	/**
 	 * Stores the cart, this function is called in the shutdown routine.
 	 */
@@ -232,10 +232,10 @@ abstract class Cart_Driver {
 		{
 			$items[$rowid] = $item->_as_array();
 		}
-		
+
 		$this->_set($this->config['storage_key'], serialize($items));
 	}
-	
+
 	/**
 	 * Returns the carts total price
 	 *
@@ -249,14 +249,14 @@ abstract class Cart_Driver {
 		{
 			$price += $item->get_subtotal(false, $include_tax);
 		}
-		
+
 		if($formatted)
 		{
 			return number_format($price, 2, $this->config['dec_point'], $this->config['thousands_sep']);
 		}
 		return $price;
 	}
-	
+
 	/**
 	 * Returns quantity total
 	 *
@@ -271,7 +271,7 @@ abstract class Cart_Driver {
 	 	}
 	 	return $total;
 	 }
-	
+
 	/**
 	 * Updates an items rowid.
 	 *
@@ -289,7 +289,7 @@ abstract class Cart_Driver {
 		}
 		return $new_rowid;
 	}
-	
+
 	/**
 	 * Returns the datastring.
 	 *
@@ -297,7 +297,7 @@ abstract class Cart_Driver {
 	 * @return	string|array		datastring or empty array of not found
 	 */
 	abstract protected function _get($key);
-	
+
 	/**
 	 * Stores the data.
 	 *
@@ -305,12 +305,12 @@ abstract class Cart_Driver {
 	 * @param	string	$data_string	serialized data string
 	 */
 	abstract protected function _set($key, $data_string);
-	
+
 	/**
 	 * Deletes the data.
 	 *
 	 * @param	string	$key		storage key
 	 */
 	abstract protected function _delete($key);
-	
+
 }
